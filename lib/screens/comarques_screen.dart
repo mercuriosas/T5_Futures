@@ -2,6 +2,8 @@ import 'package:comarquesgui/models/comarca.dart';
 import 'package:comarquesgui/screens/infocomarca_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../services/comarques_service.dart';
+
 class ComarquesScreen extends StatelessWidget {
   const ComarquesScreen({super.key, required this.provincia});
 
@@ -31,7 +33,20 @@ class ComarquesScreen extends StatelessWidget {
           // del repositori corresponent. Quan es dispose
           // d'aquesta informació es crearà la llista de comarques,
           // i mentre aquesta no es tinga, mostrarem un indicador de progrés.
-          child: _creaLlistaComarques([]), // Modificar
+          //child: _creaLlistaComarques([]), // Modificar
+          child: FutureBuilder(
+              future: ComarquesService.obtenirComarques(provincia!),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return _creaLlistaComarques(snapshot.data!);
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              }),
         ));
   }
 
@@ -66,7 +81,6 @@ class ComarcaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: () {
         Navigator.push<void>(

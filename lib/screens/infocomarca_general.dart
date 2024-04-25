@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 // al constructor.
 
 class InfoComarcaGeneral extends StatelessWidget {
-  const InfoComarcaGeneral({super.key, required this.comarca});
+  const InfoComarcaGeneral({super.key, required this.comarca, required nomcomarca});
 
   final Comarca? comarca;
 

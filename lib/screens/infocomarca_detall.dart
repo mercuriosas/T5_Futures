@@ -3,7 +3,9 @@ import 'package:comarquesgui/screens/widgets/my_weather_info.dart';
 import 'package:flutter/material.dart';
 
 class InfoComarcaDetall extends StatelessWidget {
-  const InfoComarcaDetall({super.key, required this.comarca});
+  const InfoComarcaDetall({
+    super.key,
+    required this.comarca, required nomcomarca});
 
   final Comarca? comarca;
 
@@ -25,7 +27,7 @@ class InfoComarcaDetall extends StatelessWidget {
               //           i proporciona-li correctament les coordenades
               //           de la comarca, per obtenir l'oratge.
 
-              const MyWeatherInfo(), // Original
+              MyWeatherInfo(longitud: comarca?.longitud,latitud: comarca?.latitud), // Original
               
               const SizedBox(height: 20),
               Padding(

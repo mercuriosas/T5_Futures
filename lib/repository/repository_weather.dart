@@ -9,7 +9,6 @@ class RepositoryWeather {
         // TO-DO:
         // retorna la informació del clima a partir de la classe de servei,
         // proporcionant-li la longitud i la latitud
-    return obteClima(longitud: longitud, latitud: latitud);
-         return {}; // Cal modificar aquest return      
+         return WeatherService.obteClima(longitud: longitud, latitud: latitud); // Cal modificar aquest return
       }
 }

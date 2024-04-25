@@ -3,6 +3,8 @@ import 'package:comarquesgui/screens/infocomarca_detall.dart';
 import 'package:comarquesgui/screens/infocomarca_general.dart';
 import 'package:flutter/material.dart';
 
+import '../repository/repository_comarques.dart';
+
 class InfoComarcaScreen extends StatefulWidget {
   // Recordeu que: Per mantindre el const, cal definir la propietat amb el
   // nom de la comarca com a final.
@@ -22,7 +24,7 @@ class _InfoComarcaScreenState extends State<InfoComarcaScreen> {
   // TO-DO 5b: Modifica la declaració de comarca, per a que
   //           agafe un Future, i per a que es puga assignar 
   //           el seu valor més tard.
-  Comarca? comarca;
+  late Future<dynamic> comarcaInfo;
 
   // Definim l'índex de la pantalla actual
   int indexPantallaActual = 0;
@@ -34,6 +36,7 @@ class _InfoComarcaScreenState extends State<InfoComarcaScreen> {
 
     // TO-DO 5a: Obtenir la informació de la comarca
     //           a través del repositori corresponent.
+    comarcaInfo = RepositoryComarques.obtenirInfoComarca(widget.nomComarca!);
   }
 
   @override
@@ -80,8 +83,40 @@ class _InfoComarcaScreenState extends State<InfoComarcaScreen> {
         // Mentre no es resolga la informació es mostrarà un indicador
         // de progrés.
 
-        InfoComarcaGeneral(comarca: comarca), // A modificar per la info que rebem a l'snapshot quan es resol el Future
-        InfoComarcaDetall(comarca: comarca)   // A modificar per la info que rebem a l'snapshot quan es resol el Future
+        //InfoComarcaGeneral(comarca: comarca), // A modificar per la info que rebem a l'snapshot quan es resol el Future
+        //InfoComarcaDetall(comarca: comarca)   // A modificar per la info que rebem a l'snapshot quan es resol el Future
+        Container(
+          alignment: Alignment.center,
+          child: FutureBuilder(
+            future: comarcaInfo,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return InfoComarcaGeneral(nomcomarca: widget.nomComarca!, comarca: snapshot.data);
+              } else {
+                return const Center(
+                  child: SizedBox(
+                      width: 200,height: 200,
+                      child: CircularProgressIndicator()),
+                );
+              }
+            },),
+        ),
+        Container(
+          alignment: Alignment.center,
+          child: FutureBuilder(
+            future: comarcaInfo,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return InfoComarcaDetall(nomcomarca: widget.nomComarca!, comarca: snapshot.data);
+              } else {
+                return const Center(
+                  child: SizedBox(
+                      width: 200,height: 200,
+                      child: CircularProgressIndicator()),
+                );
+              }
+            },),
+        ),
       ][indexPantallaActual],
     );
   }
